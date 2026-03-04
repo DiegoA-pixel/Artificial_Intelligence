@@ -1,4 +1,6 @@
 # Generador de Rutina con IA
+URL de la aplicacion 
+https://rutina-ia.streamlit.app
 
 App creada con Streamlit que genera rutinas diarias según edad y objetivo.
 
