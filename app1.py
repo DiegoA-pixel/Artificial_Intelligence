@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import matplotlib.pyplot as plt
 import random
-
+import os
 
 API_KEY = API_KEY = os.getenv("API_KEY", "")
 
