@@ -1,165 +1,190 @@
-# 🧘 Generador de Rutina Diaria con IA
+# 🧠 PRD – Generador de Rutinas Inteligente
 
-1. Descripción General
+## 1. Descripción del Producto
 
-El sistema permite generar rutinas personalizadas de ejercicio según las características del usuario (nivel, objetivo, tiempo disponible, etc.), incluso cuando existen fallos de conexión.
+Aplicación web desarrollada con Streamlit que permite generar rutinas personalizadas a partir de la edad y el objetivo del usuario.
 
-El producto debe funcionar en dos modos:
+El sistema funciona en dos modos:
 
-Modo Online (completo): con personalización avanzada
+- **Modo IA (online):** genera rutinas dinámicas usando una API externa.
+- **Modo básico (fallback):** genera rutinas predefinidas con variaciones aleatorias cuando falla la IA.
 
-Modo Básico (fallback): generación simple sin depender de conexión
+Además, incluye una **visualización gráfica** de la distribución diaria.
 
-2. Problema
+---
 
-Los usuarios no siempre tienen conexión estable o pueden experimentar errores al generar rutinas.
+## 2. Problema
 
-Esto provoca:
+Los usuarios que buscan rutinas rápidas:
 
-Mala experiencia de usuario
+- No siempre reciben resultados si falla la API
+- Pueden abandonar la app si no obtienen respuesta
+- Necesitan algo inmediato, no perfecto
 
-Pérdida de confianza en la app
+---
 
-Abandono del flujo
+## 3. Objetivo
 
-3. Objetivo
+Garantizar que el usuario:
 
-Garantizar que el usuario siempre reciba una rutina funcional, incluso en condiciones de error o conexión limitada.
+- Siempre obtenga una rutina
+- Tenga una experiencia fluida
+- Visualice su planificación diaria
 
-4. Usuarios Objetivo
+---
 
-Principiantes que buscan rutinas guiadas
+## 4. Alcance del Producto
 
-Usuarios intermedios sin entrenador
+El usuario puede:
 
-Personas con poco tiempo que necesitan soluciones rápidas
+- Ingresar su edad
+- Seleccionar un objetivo:
+  - Ganar músculo
+  - Bajar de peso
+  - Salud
+  - Estudio
+  - Productividad
 
-Usuarios con conexión inestable
+El sistema:
 
-5. Funcionalidades Clave
-5.1 Generación de Rutinas (Online)
+- Intenta generar rutina con IA
+- Si falla → activa modo básico automáticamente
+- Muestra rutina en texto
+- Genera gráfico de distribución diaria
 
-Personalización avanzada:
+---
 
-Objetivo (fuerza, hipertrofia, pérdida de grasa)
+## 5. Funcionalidades Clave
 
-Nivel (principiante, intermedio, avanzado)
+### 5.1 Generación con IA
 
-Tiempo disponible
+- Uso de API externa (Hugging Face)
+- Generación de texto dinámico
+- Rutinas más detalladas (cuando funciona)
 
-Equipamiento
+---
 
-Variaciones de ejercicios
+### 5.2 Modo Básico Mejorado
 
-Ajustes inteligentes
+Se activa cuando:
 
-5.2 Generación de Rutinas (Modo Básico)
+- Falla la API
+- No hay API KEY
+- Timeout o error de red
 
-Se activa cuando hay error de conexión.
+Incluye:
 
-Debe:
+- Plantillas predefinidas por objetivo
+- Selección aleatoria (variación)
+- Recomendaciones adicionales:
+  - Horas de sueño
+  - Consumo de agua
 
-Generar rutina estándar funcional
+Esto evita que todas las respuestas sean iguales.
 
-Usar plantillas predefinidas
+---
 
-No depender de APIs externas
+### 5.3 Visualización de Datos
 
-Ejemplo:
+- Gráfico de barras con:
+  - Entrenamiento / Estudio / Descanso / Actividad
+- Generado con matplotlib
+- Refuerza la comprensión del usuario
 
-Full Body (3 días)
+---
 
-Push/Pull/Legs básico
+### 5.4 Manejo de Errores
 
-Rutina en casa sin equipo
+- Uso de `try/except`
+- Validación de respuesta HTTP
+- Fallback automático sin romper la app
 
-5.3 Manejo de Errores
+Mensaje mostrado:
+> ⚠️ Usando modo básico mejorado
 
-Detectar fallo de conexión
+---
 
-Mostrar mensaje:
-"⚠️ Error de conexión, usando modo básico"
+## 6. Requisitos Funcionales
 
-Continuar ejecución sin bloquear al usuario
+- RF1: El usuario debe poder ingresar edad
+- RF2: El usuario debe seleccionar un objetivo
+- RF3: El sistema debe generar una rutina SIEMPRE
+- RF4: Debe existir fallback automático
+- RF5: Debe mostrarse un gráfico
+- RF6: El sistema debe responder en menos de 10 segundos
 
-5.4 Experiencia de Usuario
+---
 
-Flujo sin interrupciones
+## 7. Requisitos No Funcionales
 
-Feedback claro pero no alarmante
+- Usabilidad: interfaz simple (Streamlit)
+- Robustez: tolerancia a fallos de API
+- Disponibilidad: alta gracias al fallback
+- Rendimiento:
+  - IA: hasta 10 segundos
+  - Básico: menos de 1 segundo
 
-Posibilidad de regenerar rutina
+---
 
-6. Requisitos Funcionales
+## 8. Arquitectura Simplificada
 
-RF1: El sistema debe generar una rutina siempre
+- Frontend: Streamlit
+- Backend lógico: Python
+- API externa: Hugging Face (modelo de texto)
+- Fallback local: lógica basada en listas y random
 
-RF2: Debe existir un fallback automático
+---
 
-RF3: El usuario no debe quedarse sin respuesta
+## 9. Casos de Uso
 
-RF4: El sistema debe funcionar offline parcialmente
+### Caso 1 – IA funciona
 
-RF5: Las rutinas deben ser legibles y aplicables
+1. Usuario ingresa datos  
+2. Se llama a la API  
+3. Se muestra rutina generada  
+4. Se muestra gráfico  
 
-7. Requisitos No Funcionales
+---
 
-Rendimiento: < 2 segundos en modo básico
+### Caso 2 – IA falla
 
-Disponibilidad: 99% (incluyendo fallback)
+1. Usuario ingresa datos  
+2. API falla o no responde  
+3. Se activa modo básico  
+4. Se muestra rutina alternativa  
+5. Se muestra gráfico  
 
-Usabilidad: interfaz simple y clara
+---
 
-Robustez ante fallos
+## 10. Métricas de Éxito
 
-8. Casos de Uso
-Caso 1: Usuario con conexión
+- 100% de usuarios reciben una rutina
+- Tiempo de respuesta aceptable
+- App no se rompe ante errores
+- Variación en resultados (modo básico)
 
-Ingresa datos
+---
 
-Sistema procesa
+## 11. Limitaciones
 
-Se genera rutina personalizada
+- Dependencia de API externa para modo IA
+- Rutinas básicas no altamente personalizadas
+- No hay almacenamiento de usuarios
 
-Caso 2: Usuario sin conexión
+---
 
-Ingresa datos
+## 12. Futuras Mejoras
 
-Error detectado
+- Guardar rutinas del usuario
+- Más inputs (nivel, tiempo, equipo)
+- Mejor modelo de IA
+- Interfaz más avanzada
+- Historial de rutinas
 
-Se activa modo básico
+---
 
-Se genera rutina estándar
+## 13. Conclusión
 
-9. Métricas de Éxito
+El sistema prioriza la disponibilidad sobre la perfección:
 
-% de usuarios que reciben rutina (objetivo: 100%)
-
-Tiempo de generación
-
-Tasa de abandono
-
-Satisfacción del usuario
-
-10. Riesgos
-
-Rutinas básicas poco personalizadas
-
-Usuario puede percibir menor calidad
-
-Dependencia excesiva del fallback
-
-11. Futuras Mejoras
-
-Cache de rutinas personalizadas
-
-Modo offline avanzado
-
-Aprendizaje del comportamiento del usuario
-
-Integración con progreso físico
-
-12. Conclusión
-
-El sistema debe priorizar la disponibilidad sobre la perfección.
-Es mejor entregar una rutina básica que no entregar nada.
+> Es mejor entregar una rutina básica funcional que no entregar nada.
