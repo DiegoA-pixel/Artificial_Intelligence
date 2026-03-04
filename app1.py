@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import random
 import os
 
-API_KEY = API_KEY = os.getenv("API_KEY", "")
+API_KEY = os.getenv("API_KEY", "")
 
 API_URL = "https://router.huggingface.co/hf-inference/models/google/flan-t5-base"
 headers = {"Authorization": f"Bearer {API_KEY}"}
